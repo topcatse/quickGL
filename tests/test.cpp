@@ -187,10 +187,12 @@ int main(int argc, char** argv){
 
 
 //	for (int i=0; i<10000; ++i){  
-	glutMainLoop();
+//	glutMainLoop();
 //	usleep(100);
 //	}
 
+	render();
+	
 //	s.deleteTexture();
 //	delete s;
 	

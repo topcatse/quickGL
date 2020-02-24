@@ -4,6 +4,7 @@ TARGET = libquickgl
 VERSION = 
 LIBPATH = #-L/usr/local/netcdf-cxx-legacy/lib -L/usr/local/cuda/lib64	# Netcdf-c++ libaray path
 INCPATH = #-I/usr/local/netcdf-cxx-legacy/include -I/usr/local/netcdf-c/include -I/usr/local/cuda/include  # need paths to netcdf-c as well as c++ includes
+INCPATH = -I/usr/local/include
 LDFLAGS =  
 CPPFLAGS = -O3 -std=c++11 -fPIC -Wall -Wno-unused-variable
 CUDAFLAGS = -std=c++11 -Xcompiler -fPIC -arch=sm_35 -Wno-deprecated-gpu-targets

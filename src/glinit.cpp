@@ -58,11 +58,10 @@ void onDisplay(void){
 }
 
 
-void onResize(int w, int h){
+void onResize(GLFWwindow*, int w, int h){
 //	width = w; height = h;
 	if (Shape::activeCamera) Shape::activeCamera->onResize(w,h); //glViewport(0, 0, (GLsizei)w, (GLsizei)h);
 }
-
 
 void onClick(int button, int state, int x, int y){
 	if (!Tool::activeTools.empty())	Tool::activeTools.front()->onClick(button, state, x, y);
@@ -82,14 +81,28 @@ void onSpecialKeyPress(int key, int x, int y){
 }
 
 
-void initQuickGL(int argc, char** argv){
+bool GLController::initQuickGL(int argc, char** argv)
+{
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);	
-	glutInitWindowSize(width, height);
+#ifdef __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
 
-	glutCreateWindow("mini");
+	m_window = glfwCreateWindow(width, height, "mini", NULL, NULL);
+	if (m_window == NULL)
+	{
+		std::cout << "Failed to create GLFW window" << std::endl;
+		glfwTerminate();
+		return false;
+	}
+	glfwMakeContextCurrent(m_window);
 
+	glViewport(0, 0, width, height);
 
 	glEnable(GL_BLEND);
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -106,20 +119,70 @@ void initQuickGL(int argc, char** argv){
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
-	glutDisplayFunc(onDisplay);
-	glutReshapeFunc(onResize);
-
+	glfwSetFramebufferSizeCallback(m_window, onResize);  
+	glfwSetKeyCallback(m_window, key_callback);
+	glfwSetCursorPosCallback(m_window, mouse_callback);
+    glfwSetScrollCallback(m_window, scroll_callback);
+	glfwSetMouseButtonCallback(m_window, mouse_button_callback);
+    
+	// tell GLFW to capture our mouse
+    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glutMouseFunc(onClick);
 	glutMotionFunc(onMouseMove);
 	glutKeyboardFunc(onKeyPress);
 	glutSpecialFunc(onSpecialKeyPress);	
 
+	return true;
 }
 
+int GLController::render()
+{
+    while (!glfwWindowShouldClose(m_window))
+    {
+        processInput(m_window);
 
-void closeQuickGL(){
+        // render
+        // ------
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+        // -------------------------------------------------------------------------------
+        glfwSwapBuffers(m_window);
+        glfwPollEvents();
+    }
+
+    glfwTerminate();
+    return 0;
+}
+
+void GLController::closeQuickGL(){
 	glBindVertexArray(0);
 	glDeleteVertexArrays(1, &vao);
-
 }
 
+void processInput(GLFWwindow *window)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (action == GLFW_PRESS)
+        onKeyPress(key, 0, 0);
+}
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	onMouseMove(xpos, ypos);
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+}
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	onClick(button, action,  0, 0);
+}
