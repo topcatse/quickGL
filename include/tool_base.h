@@ -6,7 +6,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include <cglm/cglm.h>
+#include <glm/glm.h>
 #include "../include/shape.h"
 
 //class Tool{

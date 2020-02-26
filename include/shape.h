@@ -6,7 +6,7 @@
 #include <list>
 #include <string>
 
-#include <cglm/cglm.h>
+#include <glm/glm.h>
 
 class Camera;
 

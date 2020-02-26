@@ -1,7 +1,7 @@
 #ifndef QUICKGL_CAMERA_H_
 #define QUICKGL_CAMERA_H_
 
-#include <cglm/cglm.h>
+#include <glm/glm.h>
 
 #include "../include/shape.h"
 

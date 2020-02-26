@@ -1,7 +1,7 @@
 #include "../include/camera_controller.h"
 
 #include <GL/glew.h>
-#include <GL/glut.h>
+#include <GLFW/glfw3.h>
 
 #include "../include/shape.h"
 #include "../include/camera.h"
@@ -13,17 +13,15 @@ void CameraController::onClick(int button, int state, int x, int y){
 
 	if (Shape::activeCamera == NULL) return;
 
-	if (button == 3 && state == GLUT_DOWN){	// wheel down / pinch out
+	if (button == 3 && state == GLFW_PRESS){	// wheel down / pinch out
 		Shape::activeCamera->sc *= 1+0.1;
 	
 	}
-	if (button == 4 && state == GLUT_DOWN){	// wheel up / pinch in
+	if (button == 4 && state == GLFW_PRESS){	// wheel up / pinch in
 		Shape::activeCamera->sc *= 1-0.1;
 	}
 
 	Shape::activeCamera->transform();
-	
-	glutPostRedisplay();
 }
 	
 		
@@ -49,8 +47,6 @@ void CameraController::onMouseMove(int x, int y){
 	x0 = x;
 
 	Shape::activeCamera->transform();
-	
-	glutPostRedisplay();
 }
 
 //	InteractiveCamera(glm::vec3 _position, glm::vec3 _lookingAt, glm::vec3 _Up) : Tool() {

@@ -41,23 +41,6 @@ void printStatus(const char *step, GLuint context, GLuint status){
 	}
 }
 
-
-void onDisplay(void){
-
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	if (Shape::activeCamera == NULL) {
-		cout << "WARNING: No camera is active. Cannot draw." << endl;
-		return;
-	}
-
-	for (auto it : Shape::allShapes) it->render();	
-
-	glutSwapBuffers();
-}
-
-
 void onResize(GLFWwindow*, int w, int h){
 //	width = w; height = h;
 	if (Shape::activeCamera) Shape::activeCamera->onResize(w,h); //glViewport(0, 0, (GLsizei)w, (GLsizei)h);
@@ -127,16 +110,14 @@ bool GLController::initQuickGL(int argc, char** argv)
     
 	// tell GLFW to capture our mouse
     glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	glutMouseFunc(onClick);
-	glutMotionFunc(onMouseMove);
-	glutKeyboardFunc(onKeyPress);
-	glutSpecialFunc(onSpecialKeyPress);	
 
 	return true;
 }
 
 int GLController::render()
 {
+	glfwSwapInterval(1);
+
     while (!glfwWindowShouldClose(m_window))
     {
         processInput(m_window);
@@ -144,7 +125,14 @@ int GLController::render()
         // render
         // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		if (Shape::activeCamera == NULL) {
+			cout << "WARNING: No camera is active. Cannot draw." << endl;
+			return;
+		}
+
+		for (auto it : Shape::allShapes) it->render();
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
