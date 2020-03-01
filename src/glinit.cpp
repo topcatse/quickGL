@@ -17,13 +17,26 @@ int height = 240;
 //       e.g. It will store the active shapes list and active tools list? 
 // 		 Maybe not?
 
-void checkGLError(const char * file, int line){
-	GLenum err;
-	while((err = glGetError()) != GL_NO_ERROR){
-		cout << file << ":" << line << "   Error: " << gluErrorString(err) << endl;
-	}
+GLenum checkGLError(const char *file, int line)
+{
+    GLenum errorCode;
+    while ((errorCode = glGetError()) != GL_NO_ERROR)
+    {
+        std::string error;
+        switch (errorCode)
+        {
+            case GL_INVALID_ENUM:                  error = "INVALID_ENUM"; break;
+            case GL_INVALID_VALUE:                 error = "INVALID_VALUE"; break;
+            case GL_INVALID_OPERATION:             error = "INVALID_OPERATION"; break;
+            case GL_STACK_OVERFLOW:                error = "STACK_OVERFLOW"; break;
+            case GL_STACK_UNDERFLOW:               error = "STACK_UNDERFLOW"; break;
+            case GL_OUT_OF_MEMORY:                 error = "OUT_OF_MEMORY"; break;
+            case GL_INVALID_FRAMEBUFFER_OPERATION: error = "INVALID_FRAMEBUFFER_OPERATION"; break;
+        }
+        std::cout << error << " | " << file << " (" << line << ")" << std::endl;
+    }
+    return errorCode;
 }
-
 
 void printStatus(const char *step, GLuint context, GLuint status){
 	GLint result = GL_FALSE;
@@ -39,6 +52,37 @@ void printStatus(const char *step, GLuint context, GLuint status){
 		if (buffer[0])
 			fprintf(stderr, "%s: %s\n", step, buffer);
 	}
+}
+
+void GLController::closeQuickGL(){
+	glBindVertexArray(0);
+	glDeleteVertexArrays(1, &vao);
+}
+
+void processInput(GLFWwindow *window)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (action == GLFW_PRESS)
+        onKeyPress(key, 0, 0);
+}
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	onMouseMove(xpos, ypos);
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+}
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	onClick(button, action,  0, 0);
 }
 
 void onResize(GLFWwindow*, int w, int h){
@@ -129,7 +173,7 @@ int GLController::render()
 
 		if (Shape::activeCamera == NULL) {
 			cout << "WARNING: No camera is active. Cannot draw." << endl;
-			return;
+			return 0;
 		}
 
 		for (auto it : Shape::allShapes) it->render();
@@ -144,33 +188,4 @@ int GLController::render()
     return 0;
 }
 
-void GLController::closeQuickGL(){
-	glBindVertexArray(0);
-	glDeleteVertexArrays(1, &vao);
-}
 
-void processInput(GLFWwindow *window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-}
-
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-    if (action == GLFW_PRESS)
-        onKeyPress(key, 0, 0);
-}
-
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-	onMouseMove(xpos, ypos);
-}
-
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-}
-
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
-{
-	onClick(button, action,  0, 0);
-}

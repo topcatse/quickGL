@@ -38,12 +38,12 @@ Camera::Camera(glm::vec3 _position, glm::vec3 _lookingAt, glm::vec3 _Up){
 	// since we want rotation axis pinned at the actual origin, pre-rotate the translation vector by the initial rotations
 	glm::mat4 tv = glm::mat4(1.f);
   	tv = glm::rotate(tv, rx, camRt); 	
-  	tv = glm::rotate(tv, ry, camUp);	
+  	tv = glm::rotate(tv, ry, camUp);
 	translation = tv*glm::vec4(-_lookingAt, 1.f); //1.f*tv*glm::vec4(+pos0-, 1.f);
 		
 	transform();
-	
-	projection0 = projection = glm::perspective(glm::radians(90.0f), float(glutGet(GLUT_WINDOW_WIDTH)) / glutGet(GLUT_WINDOW_HEIGHT), 0.1f, 1000.0f);
+
+	projection0 = projection = glm::perspective(glm::radians(90.0f), float(width) / height, 0.1f, 1000.0f);
 }
 
 
@@ -116,6 +116,8 @@ void Camera::sortShapes(){
 
 
 void Camera::onResize(int w, int h){
+	width = w;
+	height = h;
 	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
 	projection = glm::perspective(glm::radians(90.0f), float(w) / h, 0.1f, 1000.0f);
 }

@@ -6,13 +6,14 @@ LIBPATH = #-L/usr/local/netcdf-cxx-legacy/lib -L/usr/local/cuda/lib64	# Netcdf-c
 INCPATH = #-I/usr/local/netcdf-cxx-legacy/include -I/usr/local/netcdf-c/include -I/usr/local/cuda/include  # need paths to netcdf-c as well as c++ includes
 INCPATH = -I/usr/local/include
 LDFLAGS =  
-CPPFLAGS = -O3 -std=c++11 -fPIC -Wall -Wno-unused-variable
+CPPFLAGS = -O3 -std=c++11 -fPIC -Wall -Wno-unused-variable $(pkg-config --cflags glfw3)
 CUDAFLAGS = -std=c++11 -Xcompiler -fPIC -arch=sm_35 -Wno-deprecated-gpu-targets
 
 LIBS = 
 #LIBS += -lnetcdf_c++ 
 #LIBS += -lgsl -lgslcblas 
-LIBS += -lGL -lglut -lGLU -lGLEW
+#LIBS += -lGL -lglut -lGLU -lGLEW
+LIBS += -lglfw -lGLEW -framework Cocoa -framework OpenGL -framework IOKit
 
 CUDA_LIBS = #-lcudart -lcurand -lcufft
 

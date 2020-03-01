@@ -1,7 +1,7 @@
 #ifndef QUICKGL_CAMERA_H_
 #define QUICKGL_CAMERA_H_
 
-#include <glm/glm.h>
+#include <glm/glm.hpp>
 
 #include "../include/shape.h"
 
@@ -15,6 +15,8 @@ class Camera{
 
 	glm::mat4 projection0, view0;
 	float tx, ty, rx, ry, sc;
+	
+	int width, height;
 	
 	public:
 	Camera(glm::vec3 _position, glm::vec3 _lookingAt, glm::vec3 _worldUp);

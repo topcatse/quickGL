@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <GL/glew.h>
-#include <GL/glut.h>
+#include <GLFW/glfw3.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -17,9 +17,6 @@ Camera2D::Camera2D(float x0, float xf, float y0, float yf, float scale) : Camera
 	
 	aspectRatio = (xf-x0)/(yf-y0);
 	cout << "Aspect ratio = " << aspectRatio << endl;
-		
-	int window_width  = glutGet(GLUT_WINDOW_WIDTH);
-	int window_height = glutGet(GLUT_WINDOW_HEIGHT);
 	
 //	int w1 = fmin(window_width, int(window_height*aspectRatio));
 //	int h1 = fmin(window_height, int(w1/aspectRatio));
@@ -28,7 +25,7 @@ Camera2D::Camera2D(float x0, float xf, float y0, float yf, float scale) : Camera
 	tx = -(x0+xf)/2*sc; ty = -(y0+yf)/2*sc;
 	
 //	projection0 = projection = glm::ortho(glm::radians(90.0f), float() / , 0.1f, 1000.0f);
-	onResize(window_width, window_height);
+	onResize(width, height);
 	
 	transform();
 }
@@ -50,6 +47,9 @@ void Camera2D::onResize(int w, int h){
 	
 	cout << "dx dy = " << dx << " " << dy << endl;
 //	view = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.f, -100.0f) );
+
+	width = w;
+	height = h;
 
 	glViewport(0,0,w,h);
  	//projection = glm::perspective(glm::radians(90.0f), float(window_width) / window_height, 0.1f, 1000.0f);

@@ -5,13 +5,13 @@
 #include <GLFW/glfw3.h>
 #include <string>
 
-#define CHECK_GL_ERROR() checkGLError(__FILE__, __LINE__)
+#define CHECK_GL_ERROR() checkGLError(__FILE__, __LINE__) 
 
 extern GLuint vao;
 extern int width;
 extern int height;
 
-void checkGLError(const char * file, int line);
+GLenum checkGLError(const char * file, int line);
 void printStatus(const char *step, GLuint context, GLuint status);
 
 GLuint loadShader(std::string filename, GLenum shader_type);
