@@ -7,10 +7,13 @@ using namespace std;
 // To Compile:
 // g++ -o 1 -L../lib test.cpp -lquickgl -lglut
 
-int main(int argc, char** argv){
+int main(int argc, char** argv)
+{
+
+    GLController controller;
 
 	// Initialize QuickGL (OpenGL initializations)
-	initQuickGL(argc, argv);
+	controller.initQuickGL(argc, argv);
 	
 	// Create a Controller to rotate/pan/zoom the view with mouse/touch
 	CameraController c;
@@ -191,12 +194,12 @@ int main(int argc, char** argv){
 //	usleep(100);
 //	}
 
-	render();
+    controller.render();
 	
 //	s.deleteTexture();
 //	delete s;
 	
-	closeQuickGL();
+    controller.closeQuickGL();
 
   return 0;
 }

@@ -153,7 +153,7 @@ bool GLController::initQuickGL(int argc, char** argv)
 	glfwSetMouseButtonCallback(m_window, mouse_button_callback);
     
 	// tell GLFW to capture our mouse
-    glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    //glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	return true;
 }

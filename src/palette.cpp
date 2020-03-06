@@ -1,6 +1,7 @@
 #include "../include/palette.h"
 
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 // ===========================================================
@@ -122,8 +123,8 @@ vector <float> Palette::mapValues(float* v, int nval, int stride, int offset, fl
 	float min_val = v[offset], max_val = v[offset];
 //	double mean = v[0];
 	for (int i=1; i < nval; ++i){
-		min_val = min(min_val, v[stride*i+offset]);
-		max_val = max(max_val, v[stride*i+offset]);
+		min_val = std::min(min_val, v[stride*i+offset]);
+		max_val = std::max(max_val, v[stride*i+offset]);
 //		mean += v[stride*i+offset];
 	}
 //	mean /= nval;
@@ -163,8 +164,8 @@ vector <unsigned char> Palette::mapValues_byte(float* v, int nval, int stride, i
 	float min_val = v[offset], max_val = v[offset];
 //	double mean = v[0];
 	for (int i=1; i < nval; ++i){
-		min_val = min(min_val, v[stride*i+offset]);
-		max_val = max(max_val, v[stride*i+offset]);
+		min_val = std::min(min_val, v[stride*i+offset]);
+		max_val = std::max(max_val, v[stride*i+offset]);
 //		mean += v[stride*i+offset];
 	}
 //	mean /= nval;

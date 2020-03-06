@@ -7,6 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "../include/shape.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -21,7 +22,7 @@ Camera2D::Camera2D(float x0, float xf, float y0, float yf, float scale) : Camera
 //	int w1 = fmin(window_width, int(window_height*aspectRatio));
 //	int h1 = fmin(window_height, int(w1/aspectRatio));
 //	w1 = h1*aspectRatio;
-	sc = min(1/(xf-x0), 1/(yf-y0));
+	sc = std::min(1/(xf-x0), 1/(yf-y0));
 	tx = -(x0+xf)/2*sc; ty = -(y0+yf)/2*sc;
 	
 //	projection0 = projection = glm::ortho(glm::radians(90.0f), float() / , 0.1f, 1000.0f);
@@ -33,8 +34,8 @@ Camera2D::Camera2D(float x0, float xf, float y0, float yf, float scale) : Camera
 
 void Camera2D::onResize(int w, int h){
 
-	int w1 = min(w, int(h*aspectRatio));
-	int h1 = min(h, int(w1/aspectRatio));
+	int w1 = std::min(w, int(h*aspectRatio));
+	int h1 = std::min(h, int(w1/aspectRatio));
 	w1 = h1*aspectRatio;
 	
 	h1 = h1*0.9;
