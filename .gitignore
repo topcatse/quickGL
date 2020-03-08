@@ -11,7 +11,6 @@
 *.cux
 1
 .Rhistory
-*.txt
 
 
 # Packages #
@@ -42,7 +41,8 @@
 # log files
 outtxt/*
 
-
+# Build artifacts
+Build/
 
 
 
